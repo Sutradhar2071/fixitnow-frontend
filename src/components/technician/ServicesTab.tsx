@@ -1,30 +1,39 @@
-﻿'use client';
+﻿"use client";
 
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { serviceSchema, ServiceFormValues } from '@/lib/validations/technician.schema';
+import { useState } from "react";
+import { useForm, Resolver } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  serviceSchema,
+  ServiceFormValues,
+} from "@/lib/validations/technician.schema";
 import {
   useMyServices,
   useCreateService,
   useUpdateService,
   useDeleteService,
-} from '@/hooks/useTechnicianData';
-import { useCategories } from '@/hooks/usePublicData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+} from "@/hooks/useTechnicianData";
+import { useCategories } from "@/hooks/usePublicData";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+} from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export function ServicesTab() {
   const { data: services, isLoading } = useMyServices();
@@ -41,10 +50,10 @@ export function ServicesTab() {
     watch,
     formState: { errors },
   } = useForm<ServiceFormValues>({
-    resolver: zodResolver(serviceSchema),
+    resolver: zodResolver(serviceSchema) as Resolver<ServiceFormValues>,
   });
 
-  const selectedCategory = watch('categoryId');
+  const selectedCategory = watch("categoryId");
 
   const onSubmit = (data: ServiceFormValues) => {
     createService(data, {
@@ -60,9 +69,7 @@ export function ServicesTab() {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>My Services</CardTitle>
         <Dialog open={open} onOpenChange={setOpen}>
-          <DialogTrigger asChild>
-            <Button>+ Add Service</Button>
-          </DialogTrigger>
+          <DialogTrigger render={<Button>+ Add Service</Button>} />
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Add New Service</DialogTitle>
@@ -70,24 +77,35 @@ export function ServicesTab() {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="title">Title</Label>
-                <Input id="title" placeholder="Pipe Repair" {...register('title')} />
-                {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
+                <Input
+                  id="title"
+                  placeholder="Pipe Repair"
+                  {...register("title")}
+                />
+                {errors.title && (
+                  <p className="text-sm text-red-500">{errors.title.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
-                <Textarea id="description" {...register('description')} />
+                <Textarea id="description" {...register("description")} />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="price">Price (৳)</Label>
-                <Input id="price" type="number" {...register('price')} />
-                {errors.price && <p className="text-sm text-red-500">{errors.price.message}</p>}
+                <Input id="price" type="number" {...register("price")} />
+                {errors.price && (
+                  <p className="text-sm text-red-500">{errors.price.message}</p>
+                )}
               </div>
 
               <div className="space-y-2">
                 <Label>Category</Label>
-                <Select value={selectedCategory} onValueChange={(v) => setValue('categoryId', v ?? '')}>
+                <Select
+                  value={selectedCategory}
+                  onValueChange={(v) => setValue("categoryId", v ?? "")}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select category" />
                   </SelectTrigger>
@@ -100,12 +118,14 @@ export function ServicesTab() {
                   </SelectContent>
                 </Select>
                 {errors.categoryId && (
-                  <p className="text-sm text-red-500">{errors.categoryId.message}</p>
+                  <p className="text-sm text-red-500">
+                    {errors.categoryId.message}
+                  </p>
                 )}
               </div>
 
               <Button type="submit" className="w-full" disabled={isCreating}>
-                {isCreating ? 'Creating...' : 'Create Service'}
+                {isCreating ? "Creating..." : "Create Service"}
               </Button>
             </form>
           </DialogContent>
@@ -119,7 +139,9 @@ export function ServicesTab() {
             ))}
           </div>
         ) : services?.length === 0 ? (
-          <p className="text-gray-500">You haven&apos;t added any services yet.</p>
+          <p className="text-gray-500">
+            You haven&apos;t added any services yet.
+          </p>
         ) : (
           <div className="space-y-3">
             {services?.map((service) => (
