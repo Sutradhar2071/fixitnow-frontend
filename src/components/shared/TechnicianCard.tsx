@@ -15,7 +15,7 @@ export function TechnicianCard({
         <CardHeader className="flex flex-row items-center gap-3">
           <div className="relative h-10 w-10 overflow-hidden rounded-full bg-gray-100">
             <Image
-              src={`https://api.dicebear.com/7.x/initials/svg?seed=${technician.user?.name || "T"}`}
+              src={`https://api.dicebear.com/7.x/initials/png?seed=${encodeURIComponent(technician.user?.name || 'T')}`}
               alt={technician.user?.name || "Technician"}
               fill
               className="object-cover"
